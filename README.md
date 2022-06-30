@@ -1,6 +1,6 @@
-# RSS Reader https://frontend-project-lvl3-anastasiakv.vercel.app/
+# frontend-project-lvl3
 
-## frontend-project-lvl3
+## [RSS Reader Demo](https://frontend-project-lvl3-anastasiakv.vercel.app/)
 
 [![Actions Status](https://github.com/AnastasiaKv/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/AnastasiaKv/frontend-project-lvl3/actions)
 [![project-check](https://github.com/AnastasiaKv/frontend-project-lvl3/actions/workflows/project-check.yml/badge.svg)](https://github.com/AnastasiaKv/frontend-project-lvl3/actions/workflows/project-check.yml)
