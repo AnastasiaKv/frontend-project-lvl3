@@ -8,6 +8,9 @@
     "build": "node_env=production webpack",
     "serve": "webpack serve --open"
   },
+  "simple-git-hooks": {
+    "pre-push": "make lint"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AnastasiaKv/frontend-project-lvl3.git"

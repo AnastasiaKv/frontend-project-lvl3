@@ -8,6 +8,8 @@
 
 ### Project CI
 
+[![project-check](https://github.com/AnastasiaKv/frontend-project-lvl3/actions/workflows/project-check.yml/badge.svg)](https://github.com/AnastasiaKv/frontend-project-lvl3/actions/workflows/project-check.yml)
+
 ### Code Climate maintainability & test coverage
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/13dad78249715ca8fd4e/maintainability)](https://codeclimate.com/github/AnastasiaKv/frontend-project-lvl3/maintainability)
