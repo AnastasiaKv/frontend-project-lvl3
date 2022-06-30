@@ -1,4 +1,4 @@
-name: Project CI
+name: project-check
 
 on: push
 
@@ -16,10 +16,10 @@ jobs:
           make build
 
       - name: Lint
-      - run: make lint
+        run: make lint
 
       - name: Test
-      - run: make test
+        run: make test
 
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
