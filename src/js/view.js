@@ -28,13 +28,13 @@ const renderFeedback = (elements, status, i18n) => {
 const renderFeeds = (elements, value, prevValue) => {
   console.log(value, prevValue);
   console.log('Feeds loading');
-}
+};
 
 const renderPosts = (elements, value, prevValue) => {
   console.log(value, prevValue);
   console.log('Posts loading');
   // elements.posts.innerHTML = value[0].content
-}
+};
 
 const render = (elements, i18n) => (path, value, prevValue) => {
   switch (path) {
