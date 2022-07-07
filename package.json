@@ -4,12 +4,24 @@
   "description": "[![Actions Status](https://github.com/AnastasiaKv/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/AnastasiaKv/frontend-project-lvl3/actions)",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --colors",
+    "test": "jest",
     "build": "node_env=production webpack",
     "serve": "webpack serve --open"
   },
   "simple-git-hooks": {
     "pre-push": "make lint"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "jsdom",
+    "testEnvironmentOptions": {
+      "url": "http://localhost/"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(on-change",
+      "|uuid",
+      ")/)"
+    ]
   },
   "repository": {
     "type": "git",
@@ -39,9 +51,9 @@
     "jest": "^28.1.1",
     "jest-cli": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
+    "mini-css-extract-plugin": "^2.6.1",
     "postcss-loader": "^7.0.0",
     "postcss-preset-env": "^7.7.2",
-    "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
     "simple-git-hooks": "^2.8.0",
     "style-loader": "^3.3.1",
@@ -51,8 +63,14 @@
     "webpack-dev-server": "^4.9.2"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "bootstrap": "^5.1.3",
+    "i18next": "^21.8.11",
     "jquery": "^3.6.0",
-    "popper.js": "^1.16.1"
+    "lodash": "^4.17.21",
+    "on-change": "^4.0.1",
+    "popper.js": "^1.16.1",
+    "uuid": "^8.3.2",
+    "yup": "^0.32.11"
   }
 }
