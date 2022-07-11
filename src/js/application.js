@@ -5,7 +5,6 @@ import { v1 as uuid } from 'uuid';
 import resources from './locales/index';
 import * as view from './view';
 import parser from './parser';
-import { reject } from 'lodash';
 
 yup.setLocale({
   mixed: {
@@ -32,7 +31,7 @@ const createRequestUrl = (url) => {
 const feedsMonitoring = (watchedState) => {
   const promises = watchedState.feeds.map((feed) => {
     const requestUrl = createRequestUrl(feed.url);
-    axios.get(requestUrl)
+    return axios.get(requestUrl)
       .then((response) => response.data.contents)
       .then((xml) => parser(xml))
       .then((data) => {
@@ -49,7 +48,7 @@ const feedsMonitoring = (watchedState) => {
       });
   });
 
-  Promise.allSettled(promises).finally((resolve, reject) => {
+  Promise.allSettled(promises).finally(() => {
     setTimeout(() => feedsMonitoring(watchedState), 5000);
   });
 };
@@ -97,7 +96,7 @@ const app = () => {
     main: document.querySelector('main'),
     lngGroup: document.querySelector('.language-group'),
   };
-
+  const defaultLanguage = 'ru';
   const state = {
     lng: defaultLanguage,
     form: {
@@ -110,8 +109,6 @@ const app = () => {
     visitedPosts: [],
     modalPostId: null,
   };
-
-  const defaultLanguage = 'ru';
 
   const i18nInstance = i18n.createInstance();
   i18nInstance.init({
