@@ -4,7 +4,6 @@ const isRSS = (doc) => !!doc.querySelector('rss');
 
 const parseAtom = (doc) => {
   const feed = doc.querySelector('feed');
-  console.log('feed', feed);
 
   const title = feed.querySelector('title')?.textContent || '';
   const description = feed.querySelector('description')?.textContent || '';
@@ -21,7 +20,6 @@ const parseAtom = (doc) => {
 
 const parseRSS = (doc) => {
   const channel = doc.querySelector('channel');
-  console.log('channel', channel);
 
   const title = channel.querySelector('title')?.textContent || '';
   const description = channel.querySelector('description')?.textContent || '';
@@ -38,7 +36,8 @@ const parseRSS = (doc) => {
 
 const parseString = (xml) => {
   const promise = new Promise((resolve, reject) => {
-    const xmlDoc = new window.DOMParser().parseFromString(xml, 'text/xml');
+    const parser = new window.DOMParser();
+    const xmlDoc = parser.parseFromString(xml, 'text/xml');
 
     const error = new Error('Unable to parse XML.');
     error.isParsingError = true;
