@@ -10,5 +10,19 @@ export default {
     feedbacks: {
       uploaded: 'RSS uploaded successfully',
     },
+    ui: {
+      en: 'ENG',
+      ru: 'РУС',
+      header: 'RSS aggregator',
+      paragraph: 'Start reading RSS today! It\'s easy, it\'s beautiful.',
+      label: 'RSS Link',
+      example: 'Example: https://ru.hexlet.io/lessons.rss',
+      feeds: 'Feeds',
+      posts: 'Posts',
+      preview: 'Preview',
+      readMore: 'Read more',
+      add: 'Add',
+      close: 'Close',
+    },
   },
 };

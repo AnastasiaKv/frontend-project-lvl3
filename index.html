@@ -29,20 +29,17 @@
           <div class="modal-body text-break"></div>
           <div class="modal-footer">
             <a
-              class="btn btn-primary full-article"
-              href=""
+              class="read-more-btn btn btn-primary full-article"
+              href="#"
               role="button"
               target="_blank"
               rel="noopener noreferrer"
-              >Читать полностью
-            </a>
+            ></a>
             <button
               type="button"
-              class="btn btn-secondary"
+              class="close-btn btn btn-secondary"
               data-bs-dismiss="modal"
-            >
-              Закрыть
-            </button>
+            ></button>
           </div>
         </div>
       </div>
@@ -51,11 +48,40 @@
     <main class="flex-grow-1">
       <section class="container-fluid bg-dark p-5">
         <div class="row">
-          <div class="header col-md-10 col-lg-8 mx-auto text-white">
-            <h1 class="display-3 mb-0">RSS агрегатор</h1>
-            <p class="lead">
-              Начните читать RSS сегодня! Это легко, это красиво.
-            </p>
+          <div class="col-md-10 col-lg-8 mx-auto text-white">
+            <div class="row">
+              <div class="col">
+                <h1 class="main-header display-3 mb-0"></h1>
+                <p class="main-paragraph lead"></p>
+              </div>
+              <div class="col-auto">
+                <div
+                  class="language-group btn-group btn-group-toggle"
+                  data-toggle="buttons"
+                >
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="options"
+                    id="ru-option"
+                    autocomplete="off"
+                    value="ru"
+                    checked
+                  />
+                  <label class="btn btn-secondary" for="ru-option"></label>
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="options"
+                    id="en-option"
+                    autocomplete="off"
+                    value="en"
+                  />
+                  <label class="btn btn-secondary" for="en-option"></label>
+                </div>
+              </div>
+            </div>
+
             <form action="" class="rss-form text-body">
               <div class="row">
                 <div class="col">
@@ -70,23 +96,19 @@
                       autofocus
                       required
                     />
-                    <label for="url-input">Ссылка RSS</label>
+                    <label class="main-label" for="url-input"></label>
                   </div>
                 </div>
                 <div class="col-auto">
                   <button
-                    class="btn h-100 btn-lg btn-primary px-sm-5"
+                    class="main-add-btn btn h-100 btn-lg btn-primary px-sm-5"
                     type="submit"
                     aria-label="add"
-                  >
-                    Добавить
-                  </button>
+                  ></button>
                 </div>
               </div>
             </form>
-            <p class="example mb-0 mt-2 text-muted">
-              Пример: https://ru.hexlet.io/lessons.rss
-            </p>
+            <p class="main-example mb-0 mt-2 text-muted"></p>
             <p class="feedback m-0 position-absolute small"></p>
           </div>
         </div>
