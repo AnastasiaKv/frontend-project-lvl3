@@ -46,36 +46,14 @@ describe('Feedback validation', () => {
     });
   });
 
-  it('uploaded', async () => {
-    await user.type(htmlElements.input, testRSSUrl);
-    await user.click(htmlElements.submit);
-    await waitFor(() => {
-      expect(screen.getByText('RSS успешно загружен')).toBeInTheDocument();
-    });
-    await waitFor(() => {
-      expect(screen.getByText('Фиды')).toBeInTheDocument();
-    });
-    await waitFor(() => {
-      expect(screen.getByText('Посты')).toBeInTheDocument();
-    });
-  });
-
   it('uploaded & already exist', async () => {
     await user.type(htmlElements.input, testRSSUrl);
     await user.click(htmlElements.submit);
 
     await waitFor(() => {
       expect(screen.getByText('RSS успешно загружен')).toBeInTheDocument();
-    });
-    await waitFor(() => {
       expect(screen.getByText('Фиды')).toBeInTheDocument();
-      const feeds = document.querySelectorAll('.feeds li');
-      expect(feeds).toHaveLength(1);
-    });
-    await waitFor(() => {
       expect(screen.getByText('Посты')).toBeInTheDocument();
-      const posts = document.querySelectorAll('.posts li');
-      expect(posts).not.toHaveLength(0);
     });
 
     await user.type(htmlElements.input, testRSSUrl);
