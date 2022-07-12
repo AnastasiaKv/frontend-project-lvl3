@@ -37,6 +37,9 @@
     "@babel/core": "^7.18.5",
     "@babel/eslint-parser": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
+    "@testing-library/dom": "^8.16.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/user-event": "^14.2.1",
     "autoprefixer": "^10.4.7",
     "babel-jest": "^28.1.1",
     "babel-loader": "^8.2.5",
@@ -71,7 +74,6 @@
     "lodash": "^4.17.21",
     "on-change": "^4.0.1",
     "popper.js": "^1.16.1",
-    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   }
 }
