@@ -6,6 +6,7 @@ export default {
       ERR_ALREADY_EXISTS: 'RSS уже существует',
       ERR_INVALID_URL: 'Ссылка должна быть валидным URL',
       ERR_INVALID_RSS: 'Ресурс не содержит валидный RSS',
+      ERR_REQUIRED: 'Не должно быть пустым',
     },
     feedbacks: {
       uploaded: 'RSS успешно загружен',
