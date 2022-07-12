@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import axios from 'axios';
 import i18n from 'i18next';
-import { v1 as uuid } from 'uuid';
+import _ from 'lodash';
 import resources from './locales/index';
 import * as view from './view';
 import parser from './parser';
@@ -10,6 +10,7 @@ yup.setLocale({
   mixed: {
     default: 'ERR_UNKNOWN',
     notOneOf: 'ERR_ALREADY_EXISTS',
+    required: 'ERR_REQUIRED',
   },
   string: {
     url: 'ERR_INVALID_URL',
@@ -40,7 +41,7 @@ const feedsMonitoring = (watchedState) => {
           .map((post) => post.link);
         const newPosts = data.posts
           .filter((post) => !oldPostsLinks.includes(post.link))
-          .map((post) => ({ ...post, id: uuid(), feedId: feed.id }));
+          .map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
         watchedState.posts.unshift(...newPosts);
       })
       .catch((err) => {
@@ -64,12 +65,12 @@ const getRSS = (url, watchedState) => {
     .then((data) => {
       const { title, description, posts } = data;
       const feed = {
-        id: uuid(),
+        id: _.uniqueId('feed_'),
         url,
         title,
         description,
       };
-      const feedPosts = posts.map((post) => ({ ...post, id: uuid(), feedId: feed.id }));
+      const feedPosts = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
 
       watchedState.feeds.unshift(feed);
       watchedState.posts.unshift(...feedPosts);
