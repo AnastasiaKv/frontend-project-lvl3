@@ -52,7 +52,13 @@ describe('Feedback validation', () => {
 
     await waitFor(() => {
       expect(screen.getByText('RSS успешно загружен')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       expect(screen.getByText('Фиды')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       expect(screen.getByText('Посты')).toBeInTheDocument();
     });
 
