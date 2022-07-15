@@ -35,28 +35,23 @@ const parseRSS = (doc) => {
 };
 
 const parseString = (xml) => {
-  const promise = new Promise((resolve, reject) => {
-    const parser = new window.DOMParser();
-    const xmlDoc = parser.parseFromString(xml, 'text/xml');
+  const parser = new window.DOMParser();
+  const xmlDoc = parser.parseFromString(xml, 'text/xml');
 
-    const error = new Error('Unable to parse XML.');
-    error.isParsingError = true;
+  const error = new Error('Unable to parse XML.');
+  error.isParsingError = true;
 
-    if (isParserError(xmlDoc)) {
-      reject(error);
-    } else if (isAtom(xmlDoc)) {
-      const result = parseAtom(xmlDoc);
-      resolve(result);
-    } else if (isRSS(xmlDoc)) {
-      const result = parseRSS(xmlDoc);
-      resolve(result);
-    } else {
-      error.message = 'RSS version not recognized.';
-      reject(error);
-    }
-  });
-
-  return promise;
+  if (isParserError(xmlDoc)) {
+    throw error;
+  }
+  if (isAtom(xmlDoc)) {
+    return parseAtom(xmlDoc);
+  } else if (isRSS(xmlDoc)) {
+    return parseRSS(xmlDoc);
+  } else {
+    error.message = 'RSS version not recognized.';
+    throw error;
+  }
 };
 
 export default parseString;

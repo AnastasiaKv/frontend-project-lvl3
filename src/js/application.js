@@ -6,6 +6,8 @@ import resources from './locales/index';
 import * as view from './view';
 import parser from './parser';
 
+const monitoringTimeInterval = 5000;
+
 yup.setLocale({
   mixed: {
     default: 'unknown',
@@ -32,13 +34,12 @@ const feedsMonitoring = (watchedState) => {
   const promises = watchedState.feeds.map((feed) => {
     const requestUrl = createRequestUrl(feed.url);
     return axios.get(requestUrl)
-      .then((response) => response.data.contents)
-      .then((xml) => parser(xml))
-      .then((data) => {
+      .then((response) => {
+        const { posts } = parser(response.data.contents);
         const oldPostsLinks = watchedState.posts
           .filter((post) => post.feedId === feed.id)
           .map((post) => post.link);
-        const newPosts = data.posts
+        const newPosts = posts
           .filter((post) => !oldPostsLinks.includes(post.link))
           .map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
         watchedState.posts.unshift(...newPosts);
@@ -49,7 +50,7 @@ const feedsMonitoring = (watchedState) => {
   });
 
   Promise.allSettled(promises).finally(() => {
-    setTimeout(() => feedsMonitoring(watchedState), 5000);
+    setTimeout(() => feedsMonitoring(watchedState), monitoringTimeInterval);
   });
 };
 
@@ -58,17 +59,10 @@ const getRSS = (url, watchedState) => {
   axios.get(requestUrl)
     .then((response) => {
       watchedState.form.status = 'success';
-      return response.data.contents;
-    })
-    .then((xml) => parser(xml))
-    .then((data) => {
-      const { title, description, posts } = data;
-      const feed = {
-        id: _.uniqueId('feed_'),
-        url,
-        title,
-        description,
-      };
+      const feedData = parser(response.data.contents);
+      const { posts, ...feed } = feedData;
+      feed.id = _.uniqueId('feed_');
+      feed.url = url;
       const feedPosts = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
 
       watchedState.feeds.unshift(feed);
@@ -153,7 +147,7 @@ const app = () => {
 
     view.render(elements, i18nInstance, watchedState);
 
-    setTimeout(() => feedsMonitoring(watchedState), 5000);
+    setTimeout(() => feedsMonitoring(watchedState), monitoringTimeInterval);
   }).catch((err) => {
     console.error(err);
   });
