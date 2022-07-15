@@ -1,12 +1,12 @@
 export default {
   translation: {
     errors: {
-      ERR_NETWORK: 'Ошибка сети',
-      ERR_UNKNOWN: 'Неизвестная ошибка. Что-то пошло не так.',
-      ERR_ALREADY_EXISTS: 'RSS уже существует',
-      ERR_INVALID_URL: 'Ссылка должна быть валидным URL',
-      ERR_INVALID_RSS: 'Ресурс не содержит валидный RSS',
-      ERR_REQUIRED: 'Не должно быть пустым',
+      network: 'Ошибка сети',
+      unknown: 'Неизвестная ошибка. Что-то пошло не так.',
+      alreadyExist: 'RSS уже существует',
+      invalidURL: 'Ссылка должна быть валидным URL',
+      invalidRSS: 'Ресурс не содержит валидный RSS',
+      required: 'Не должно быть пустым',
     },
     feedbacks: {
       uploaded: 'RSS успешно загружен',

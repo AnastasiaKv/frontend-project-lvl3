@@ -8,21 +8,20 @@ import parser from './parser';
 
 yup.setLocale({
   mixed: {
-    default: 'ERR_UNKNOWN',
-    notOneOf: 'ERR_ALREADY_EXISTS',
-    required: 'ERR_REQUIRED',
+    default: 'unknown',
+    notOneOf: 'alreadyExist',
+    required: 'required',
   },
   string: {
-    url: 'ERR_INVALID_URL',
+    url: 'invalidURL',
   },
 });
 
-const schema = (urls) => yup.object().shape({
+const generateSchema = (urls) => yup.object().shape({
   url: yup.string().required().url().notOneOf(urls),
 });
 
 const createRequestUrl = (url) => {
-  // `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
   const request = new URL('/get', 'https://allorigins.hexlet.app');
   request.searchParams.set('disableCache', 'true');
   request.searchParams.set('url', url);
@@ -77,9 +76,9 @@ const getRSS = (url, watchedState) => {
       watchedState.form.status = 'filling';
     })
     .catch((err) => {
-      let errorType = 'ERR_UNKNOWN';
-      if (err.isParsingError) errorType = 'ERR_INVALID_RSS';
-      if (err.isAxiosError) errorType = 'ERR_NETWORK';
+      let errorType = 'unknown';
+      if (err.isParsingError) errorType = 'invalidRSS';
+      if (err.isAxiosError) errorType = 'network';
       watchedState.form.error = errorType;
       watchedState.form.status = 'fail';
     });
@@ -126,7 +125,7 @@ const app = () => {
       const url = formData.get('url').trim();
       const feedsUrls = watchedState.feeds.map((feed) => feed.url);
 
-      schema(feedsUrls).validate({ url })
+      generateSchema(feedsUrls).validate({ url })
         .then(() => {
           watchedState.form.status = 'sending';
           watchedState.form.error = null;
