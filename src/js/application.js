@@ -24,10 +24,10 @@ const generateSchema = (urls) => yup.object().shape({
 });
 
 const createRequestUrl = (url) => {
-  const request = new URL('/get', 'https://allorigins.hexlet.app');
-  request.searchParams.set('disableCache', 'true');
-  request.searchParams.set('url', url);
-  return request;
+  const requestUrl = new URL('/get', 'https://allorigins.hexlet.app');
+  requestUrl.searchParams.set('disableCache', 'true');
+  requestUrl.searchParams.set('url', url);
+  return requestUrl;
 };
 
 const feedsMonitoring = (watchedState) => {
