@@ -67,10 +67,10 @@ describe('Render check', () => {
     await user.type(htmlElements.input, testRSSUrl);
     await user.click(htmlElements.submit);
     await waitFor(() => {
-      expect(screen.queryAllByRole('feedItem')).toHaveLength(1);
+      expect(screen.queryAllByRole('feedItem')[0]).toBeInTheDocument();
     });
     await waitFor(() => {
-      expect(screen.queryAllByRole('postLink').length).toBeGreaterThan(0);
+      expect(screen.queryAllByRole('postLink')[0]).toBeInTheDocument();
     });
 
     const lastPost = screen.queryAllByRole('postLink')[0];
