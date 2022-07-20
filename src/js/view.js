@@ -28,6 +28,20 @@ const renderFeedback = (elements, i18n, status) => {
   }
 };
 
+const createFeedElement = (feed) => (
+  `<li class="list-group-item border-0" role="feedItem">
+    <div class="row">
+      <div class="col">
+        <h3 class="title h6 m-0">${DOMPurify.sanitize(feed.title)}</h3>
+        <p class="description m-0 small text-black-50">${DOMPurify.sanitize(feed.description)}</p>
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn-close" aria-label="Close" data-feed-id="${feed.id}"></button>
+      </div>
+    </div>
+  </li>`
+);
+
 const renderFeeds = (elements, i18n, feeds) => {
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
@@ -40,19 +54,7 @@ const renderFeeds = (elements, i18n, feeds) => {
 
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0');
-  const listItems = feeds.map(({ id, title, description }) => (
-    `<li class="list-group-item border-0" role="feedItem">
-      <div class="row">
-        <div class="col">
-          <h3 class="title h6 m-0">${DOMPurify.sanitize(title)}</h3>
-          <p class="description m-0 small text-black-50">${DOMPurify.sanitize(description)}</p>
-        </div>
-        <div class="col-auto">
-          <button type="button" class="btn-close" aria-label="Close" data-feed-id="${id}"></button>
-        </div>
-      </div>
-    </li>`
-  ));
+  const listItems = feeds.map(createFeedElement);
   listGroup.innerHTML = listItems.join('');
 
   card.append(cardBody, listGroup);
@@ -156,32 +158,25 @@ const render = (elements, i18n, state) => {
 
 const stateWatcher = (state, elements, i18n) => onChange(state, (path, value) => {
   switch (path) {
-    case 'form.status':
-      renderFeedback(elements, i18n, value);
+    case 'form.status': renderFeedback(elements, i18n, value);
       break;
-    case 'form.error':
-      elements.feedback.textContent = value ? i18n.t(`errors.${value}`) : '';
+    case 'form.error': elements.feedback.textContent = value ? i18n.t(`errors.${value}`) : '';
       break;
     case 'form.valid':
       if (!value) elements.input.classList.add('is-invalid');
       else elements.input.classList.remove('is-invalid');
       break;
-    case 'feeds':
-      renderFeeds(elements, i18n, value);
+    case 'feeds': renderFeeds(elements, i18n, value);
       localStorage.setItem('feeds', JSON.stringify(value));
       break;
-    case 'posts':
-      renderPosts(elements, i18n, value);
+    case 'posts': renderPosts(elements, i18n, value);
       renderVisitedPost(elements, state.visitedPosts);
       break;
-    case 'visitedPosts':
-      renderVisitedPost(elements, value);
+    case 'visitedPosts': renderVisitedPost(elements, value);
       break;
-    case 'modalPostId':
-      renderModal(elements, i18n, state.posts.find(({ id }) => id === value));
+    case 'modalPostId': renderModal(elements, i18n, state.posts.find(({ id }) => id === value));
       break;
-    case 'lng':
-      i18n.changeLanguage(value).then(() => render(elements, i18n, state));
+    case 'lng': i18n.changeLanguage(value).then(() => render(elements, i18n, state));
       break;
     default:
       break;

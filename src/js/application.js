@@ -6,6 +6,7 @@ import resources from './locales/index';
 import * as view from './view';
 import parser from './parser';
 
+const defaultLanguage = 'ru';
 const monitoringTimeInterval = 5000;
 
 yup.setLocale({
@@ -132,7 +133,6 @@ const getHTMLElements = () => ({
 });
 
 const app = () => {
-  const defaultLanguage = 'ru';
   const elements = getHTMLElements();
   const state = {
     lng: defaultLanguage,
@@ -148,11 +148,7 @@ const app = () => {
   };
 
   const i18nInstance = i18n.createInstance();
-  i18nInstance.init({
-    lng: defaultLanguage,
-    debug: true,
-    resources,
-  }).then(() => {
+  i18nInstance.init({ lng: defaultLanguage, debug: true, resources }).then(() => {
     const watchedState = view.stateWatcher(state, elements, i18nInstance);
 
     elements.form.addEventListener('submit', submitFormHandler(watchedState));
@@ -164,9 +160,7 @@ const app = () => {
 
     view.render(elements, i18nInstance, watchedState);
     feedsMonitoring(watchedState);
-  }).catch((err) => {
-    console.error(err);
-  });
+  }).catch((err) => { console.error(err); });
 };
 
 export default app;
