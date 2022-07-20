@@ -22,43 +22,31 @@ beforeEach(async () => {
   htmlElements.radioRU = screen.getByRole('radio', { name: 'radio-ru' });
 });
 
-describe('Feedback validation', () => {
-  it('required', async () => {
-    await user.type(htmlElements.input, ' ');
+const table = [
+  ['required', ' ', 'Не должно быть пустым'],
+  ['invalid url', 'test.com', 'Ссылка должна быть валидным URL'],
+  ['invalid rss', 'http://lorem-rss.herokuapp.com', 'Ресурс не содержит валидный RSS'],
+  ['uploaded', testRSSUrl, 'RSS успешно загружен'],
+];
+
+describe.each(table)('Feedback validation', (error, url, feedback) => {
+  test(`${error}`, async () => {
+    await user.type(htmlElements.input, url);
     await user.click(htmlElements.submit);
     await waitFor(() => {
-      expect(screen.getByText('Не должно быть пустым')).toBeInTheDocument();
+      expect(screen.getByText(feedback)).toBeInTheDocument();
     });
   });
+});
 
-  it('invalid url', async () => {
-    await user.type(htmlElements.input, 'test.com');
-    await user.click(htmlElements.submit);
-    await waitFor(() => {
-      expect(screen.getByText('Ссылка должна быть валидным URL')).toBeInTheDocument();
-    });
-  });
+test('already exist', async () => {
+  await user.type(htmlElements.input, testRSSUrl);
+  await user.click(htmlElements.submit);
 
-  it('invalid rss', async () => {
-    await user.type(htmlElements.input, 'http://lorem-rss.herokuapp.com');
-    await user.click(htmlElements.submit);
-    await waitFor(() => {
-      expect(screen.getByText('Ресурс не содержит валидный RSS')).toBeInTheDocument();
-    });
-  });
-
-  it('uploaded & already exist', async () => {
-    await user.type(htmlElements.input, testRSSUrl);
-    await user.click(htmlElements.submit);
-    await waitFor(() => {
-      expect(screen.getByText('RSS успешно загружен')).toBeInTheDocument();
-    });
-
-    await user.type(htmlElements.input, testRSSUrl);
-    await user.click(htmlElements.submit);
-    await waitFor(() => {
-      expect(screen.getByText('RSS уже существует')).toBeInTheDocument();
-    });
+  await waitFor(() => {
+    user.type(htmlElements.input, testRSSUrl);
+    user.click(htmlElements.submit);
+    expect(screen.getByText('RSS уже существует')).toBeInTheDocument();
   });
 });
 

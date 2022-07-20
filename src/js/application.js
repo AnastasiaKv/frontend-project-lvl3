@@ -81,20 +81,59 @@ const getRSS = (url, watchedState) => {
 
 const getStoredFeeds = () => JSON.parse(localStorage.getItem('feeds')) || [];
 
-const app = () => {
-  const elements = {
-    form: document.querySelector('.rss-form'),
-    input: document.getElementById('url-input'),
-    submit: document.querySelector('.rss-form button[type="submit"]'),
-    feedback: document.querySelector('.feedback'),
-    postsCard: document.querySelector('.posts'),
-    feedsCard: document.querySelector('.feeds'),
-    modal: document.querySelector('.modal'),
-    main: document.querySelector('main'),
-    lngGroup: document.querySelector('.language-group'),
-  };
+const submitFormHandler = (watchedState) => (e) => {
+  e.preventDefault();
 
+  const formData = new FormData(e.target);
+  const url = formData.get('url').trim();
+  const feedsUrls = watchedState.feeds.map((feed) => feed.url);
+
+  generateSchema(feedsUrls).validate({ url })
+    .then(() => {
+      watchedState.form.status = 'sending';
+      watchedState.form.error = null;
+      watchedState.form.valid = true;
+      getRSS(url, watchedState);
+    })
+    .catch((err) => {
+      watchedState.form.status = 'fail';
+      watchedState.form.error = err.errors;
+      watchedState.form.valid = false;
+      console.error(err);
+    });
+};
+
+const previewBtnHandler = (watchedState) => ({ target }) => {
+  if (target.hasAttribute('data-id')) {
+    const { id } = target.dataset;
+    watchedState.modalPostId = id;
+    if (!watchedState.visitedPosts.includes(id)) watchedState.visitedPosts.push(id);
+  }
+};
+
+const removeBtnHandler = (watchedState) => ({ target }) => {
+  const { feedId } = target.dataset;
+  if (feedId) {
+    watchedState.feeds = watchedState.feeds.filter((feed) => feed.id !== feedId);
+    watchedState.posts = watchedState.posts.filter((post) => post.feedId !== feedId);
+  }
+};
+
+const getHTMLElements = () => ({
+  form: document.querySelector('.rss-form'),
+  input: document.getElementById('url-input'),
+  submit: document.querySelector('.rss-form button[type="submit"]'),
+  feedback: document.querySelector('.feedback'),
+  postsCard: document.querySelector('.posts'),
+  feedsCard: document.querySelector('.feeds'),
+  modal: document.querySelector('.modal'),
+  main: document.querySelector('main'),
+  lngGroup: document.querySelector('.language-group'),
+});
+
+const app = () => {
   const defaultLanguage = 'ru';
+  const elements = getHTMLElements();
   const state = {
     lng: defaultLanguage,
     form: {
@@ -116,50 +155,14 @@ const app = () => {
   }).then(() => {
     const watchedState = view.stateWatcher(state, elements, i18nInstance);
 
-    elements.form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(e.target);
-      const url = formData.get('url').trim();
-      const feedsUrls = watchedState.feeds.map((feed) => feed.url);
-
-      generateSchema(feedsUrls).validate({ url })
-        .then(() => {
-          watchedState.form.status = 'sending';
-          watchedState.form.error = null;
-          watchedState.form.valid = true;
-          getRSS(url, watchedState);
-        })
-        .catch((err) => {
-          watchedState.form.status = 'fail';
-          watchedState.form.error = err.errors;
-          watchedState.form.valid = false;
-          console.error(err);
-        });
-    });
-
-    elements.postsCard.addEventListener('click', ({ target }) => {
-      if (target.hasAttribute('data-id')) {
-        const { id } = target.dataset;
-        watchedState.modalPostId = id;
-        if (!watchedState.visitedPosts.includes(id)) watchedState.visitedPosts.push(id);
-      }
-    });
-
-    elements.feedsCard.addEventListener('click', ({ target }) => {
-      const { feedId } = target.dataset;
-      if (feedId) {
-        watchedState.feeds = watchedState.feeds.filter((feed) => feed.id !== feedId);
-        watchedState.posts = watchedState.posts.filter((post) => post.feedId !== feedId);
-      }
-    });
-
+    elements.form.addEventListener('submit', submitFormHandler(watchedState));
+    elements.postsCard.addEventListener('click', previewBtnHandler(watchedState));
+    elements.feedsCard.addEventListener('click', removeBtnHandler(watchedState));
     elements.lngGroup.addEventListener('click', ({ target }) => {
       if (target.value) watchedState.lng = target.value;
     });
 
     view.render(elements, i18nInstance, watchedState);
-
     feedsMonitoring(watchedState);
   }).catch((err) => {
     console.error(err);

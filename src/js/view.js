@@ -60,6 +60,27 @@ const renderFeeds = (elements, i18n, feeds) => {
   if (feeds.length) elements.feedsCard.append(card);
 };
 
+const createPostElement = (i18n) => (post) => (
+  `<li class="list-group-item d-flex justify-content-between align-items-start border-0">
+    <a
+      href="${DOMPurify.sanitize(post.link)}"
+      class="fw-bold"
+      data-id="${post.id}"
+      target="_blank"
+      rel="noopener noreferrer"
+      role="postLink"
+    >${DOMPurify.sanitize(post.header)}</a>
+    <button
+      type="button"
+      class="btn btn-outline-primary btn-sm"
+      data-id="${post.id}"
+      data-bs-toggle="modal"
+      data-bs-target="#modal"
+      role="postBtn"
+    >${i18n.t('ui.preview')}</button>
+  </li>`
+);
+
 const renderPosts = (elements, i18n, posts) => {
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
@@ -72,26 +93,7 @@ const renderPosts = (elements, i18n, posts) => {
 
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0');
-  const listItems = posts.map((post) => (
-    `<li class="list-group-item d-flex justify-content-between align-items-start border-0">
-      <a
-        href="${DOMPurify.sanitize(post.link)}"
-        class="fw-bold"
-        data-id="${post.id}"
-        target="_blank"
-        rel="noopener noreferrer"
-        role="postLink"
-      >${DOMPurify.sanitize(post.header)}</a>
-      <button
-        type="button"
-        class="btn btn-outline-primary btn-sm"
-        data-id="${post.id}"
-        data-bs-toggle="modal"
-        data-bs-target="#modal"
-        role="postBtn"
-      >${i18n.t('ui.preview')}</button>
-    </li>`
-  ));
+  const listItems = posts.map(createPostElement(i18n));
   listGroup.innerHTML = listItems.join('');
 
   card.append(cardBody, listGroup);
