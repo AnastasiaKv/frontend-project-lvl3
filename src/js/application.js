@@ -86,10 +86,11 @@ const app = () => {
     feedback: document.querySelector('.feedback'),
     postsCard: document.querySelector('.posts'),
     feedsCard: document.querySelector('.feeds'),
-    modal: document.querySelector('#modal'),
+    modal: document.querySelector('.modal'),
     main: document.querySelector('main'),
     lngGroup: document.querySelector('.language-group'),
   };
+
   const defaultLanguage = 'ru';
   const state = {
     lng: defaultLanguage,
@@ -141,8 +142,16 @@ const app = () => {
       }
     });
 
-    elements.lngGroup.addEventListener('click', (e) => {
-      if (e.target.value) watchedState.lng = e.target.value;
+    elements.feedsCard.addEventListener('click', ({ target }) => {
+      const { feedId } = target.dataset;
+      if (feedId) {
+        watchedState.feeds = watchedState.feeds.filter((feed) => feed.id !== feedId);
+        watchedState.posts = watchedState.posts.filter((post) => post.feedId !== feedId);
+      }
+    });
+
+    elements.lngGroup.addEventListener('click', ({ target }) => {
+      if (target.value) watchedState.lng = target.value;
     });
 
     view.render(elements, i18nInstance, watchedState);

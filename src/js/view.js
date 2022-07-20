@@ -40,17 +40,24 @@ const renderFeeds = (elements, i18n, feeds) => {
 
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0');
-  const listItems = feeds.map(({ title, description }) => (
+  const listItems = feeds.map(({ id, title, description }) => (
     `<li class="list-group-item border-0" role="feedItem">
-      <h3 class="title h6 m-0">${DOMPurify.sanitize(title)}</h3>
-      <p class="description m-0 small text-black-50">${DOMPurify.sanitize(description)}</p>
+      <div class="row">
+        <div class="col">
+          <h3 class="title h6 m-0">${DOMPurify.sanitize(title)}</h3>
+          <p class="description m-0 small text-black-50">${DOMPurify.sanitize(description)}</p>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn-close" aria-label="Close" data-feed-id="${id}"></button>
+        </div>
+      </div>
     </li>`
   ));
   listGroup.innerHTML = listItems.join('');
 
   card.append(cardBody, listGroup);
   elements.feedsCard.innerHTML = '';
-  elements.feedsCard.append(card);
+  if (feeds.length) elements.feedsCard.append(card);
 };
 
 const renderPosts = (elements, i18n, posts) => {
@@ -89,7 +96,7 @@ const renderPosts = (elements, i18n, posts) => {
 
   card.append(cardBody, listGroup);
   elements.postsCard.innerHTML = '';
-  elements.postsCard.append(card);
+  if (posts.length) elements.postsCard.append(card);
 };
 
 const renderVisitedPost = (elements, visitedPosts) => {
