@@ -166,6 +166,7 @@ const stateWatcher = (state, elements, i18n) => onChange(state, (path, value) =>
       break;
     case 'feeds':
       renderFeeds(elements, i18n, value);
+      localStorage.setItem('feeds', JSON.stringify(value));
       break;
     case 'posts':
       renderPosts(elements, i18n, value);

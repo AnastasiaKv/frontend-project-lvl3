@@ -75,8 +75,11 @@ const getRSS = (url, watchedState) => {
       if (err.isAxiosError) errorType = 'network';
       watchedState.form.error = errorType;
       watchedState.form.status = 'fail';
+      console.error(err);
     });
 };
+
+const getStoredFeeds = () => JSON.parse(localStorage.getItem('feeds')) || [];
 
 const app = () => {
   const elements = {
@@ -99,7 +102,7 @@ const app = () => {
       error: null,
       valid: true,
     },
-    feeds: [],
+    feeds: getStoredFeeds(),
     posts: [],
     visitedPosts: [],
     modalPostId: null,
@@ -131,6 +134,7 @@ const app = () => {
           watchedState.form.status = 'fail';
           watchedState.form.error = err.errors;
           watchedState.form.valid = false;
+          console.error(err);
         });
     });
 
