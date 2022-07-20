@@ -160,7 +160,7 @@ const app = () => {
 
     view.render(elements, i18nInstance, watchedState);
 
-    setTimeout(() => feedsMonitoring(watchedState), monitoringTimeInterval);
+    feedsMonitoring(watchedState);
   }).catch((err) => {
     console.error(err);
   });
