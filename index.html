@@ -46,41 +46,35 @@
     </div>
 
     <main class="flex-grow-1">
+      <div
+        class="language-group btn-group btn-group-toggle position-absolute top-0 end-0 m-4"
+        data-toggle="buttons"
+      >
+        <input
+          type="radio"
+          class="btn-check"
+          name="options"
+          id="ru-option"
+          autocomplete="off"
+          value="ru"
+          checked
+        />
+        <label class="btn btn-secondary" for="ru-option"></label>
+        <input
+          type="radio"
+          class="btn-check"
+          name="options"
+          id="en-option"
+          autocomplete="off"
+          value="en"
+        />
+        <label class="btn btn-secondary" for="en-option"></label>
+      </div>
       <section class="container-fluid bg-dark p-5">
         <div class="row">
           <div class="col-md-10 col-lg-8 mx-auto text-white">
-            <div class="row">
-              <div class="col">
-                <h1 class="main-header display-3 mb-0"></h1>
-                <p class="main-paragraph lead"></p>
-              </div>
-              <div class="col-auto">
-                <div
-                  class="language-group btn-group btn-group-toggle"
-                  data-toggle="buttons"
-                >
-                  <input
-                    type="radio"
-                    class="btn-check"
-                    name="options"
-                    id="ru-option"
-                    autocomplete="off"
-                    value="ru"
-                    checked
-                  />
-                  <label class="btn btn-secondary" for="ru-option"></label>
-                  <input
-                    type="radio"
-                    class="btn-check"
-                    name="options"
-                    id="en-option"
-                    autocomplete="off"
-                    value="en"
-                  />
-                  <label class="btn btn-secondary" for="en-option"></label>
-                </div>
-              </div>
-            </div>
+            <h1 class="main-header display-3 mb-0"></h1>
+            <p class="main-paragraph lead"></p>
 
             <form action="" class="rss-form text-body">
               <div class="row">
