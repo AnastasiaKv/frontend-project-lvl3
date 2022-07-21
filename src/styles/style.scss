@@ -1,6 +1,25 @@
+@import "./variables.scss";
 @import "~bootstrap/scss/bootstrap";
+
+html {
+  overflow-y:scroll;
+}
 
 img {
   max-width: 100%;
   height: auto;
 }
+
+.description {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.feed.active {
+  .description {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+  }
+}
+

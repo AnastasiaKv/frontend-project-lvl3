@@ -29,16 +29,12 @@ const renderFeedback = (elements, i18n, status) => {
 };
 
 const createFeedElement = (feed) => (
-  `<li class="list-group-item border-0" role="feedItem">
-    <div class="row">
-      <div class="col">
-        <h3 class="title h6 m-0">${DOMPurify.sanitize(feed.title)}</h3>
-        <p class="description m-0 small text-black-50">${DOMPurify.sanitize(feed.description)}</p>
-      </div>
-      <div class="col-auto">
-        <button type="button" class="btn-close" aria-label="Close" data-feed-id="${feed.id}"></button>
-      </div>
+  `<li class="feed list-group-item list-group-item-action d-flex justify-content-between py-3 border-0" data-feed-id="${feed.id}" role="feedItem">
+    <div class="pe-none">
+      <h3 class="title h6 m-0">${DOMPurify.sanitize(feed.title)}</h3>
+      <p class="description m-0 small">${DOMPurify.sanitize(feed.description)}</p>
     </div>
+    <button type="button" class="btn-close" aria-label="Close"></button>
   </li>`
 );
 
@@ -60,6 +56,14 @@ const renderFeeds = (elements, i18n, feeds) => {
   card.append(cardBody, listGroup);
   elements.feedsCard.innerHTML = '';
   if (feeds.length) elements.feedsCard.append(card);
+};
+
+const renderActiveFeed = (elements, activeFeedId) => {
+  const feedItems = elements.feedsCard.querySelectorAll('[data-feed-id]');
+  feedItems.forEach((feed) => {
+    if (feed.dataset.feedId === activeFeedId) feed.classList.add('active');
+    else feed.classList.remove('active');
+  });
 };
 
 const createPostElement = (i18n) => (post) => (
@@ -158,25 +162,37 @@ const render = (elements, i18n, state) => {
 
 const stateWatcher = (state, elements, i18n) => onChange(state, (path, value) => {
   switch (path) {
-    case 'form.status': renderFeedback(elements, i18n, value);
+    case 'form.status':
+      renderFeedback(elements, i18n, value);
       break;
-    case 'form.error': elements.feedback.textContent = value ? i18n.t(`errors.${value}`) : '';
+    case 'form.error':
+      elements.feedback.textContent = value ? i18n.t(`errors.${value}`) : '';
       break;
     case 'form.valid':
       if (!value) elements.input.classList.add('is-invalid');
       else elements.input.classList.remove('is-invalid');
       break;
-    case 'feeds': renderFeeds(elements, i18n, value);
+    case 'feeds':
+      renderFeeds(elements, i18n, value);
       localStorage.setItem('feeds', JSON.stringify(value));
       break;
-    case 'posts': renderPosts(elements, i18n, value);
+    case 'posts':
+      renderPosts(elements, i18n, value);
       renderVisitedPost(elements, state.visitedPosts);
       break;
-    case 'visitedPosts': renderVisitedPost(elements, value);
+    case 'visitedPosts':
+      renderVisitedPost(elements, value);
       break;
-    case 'modalPostId': renderModal(elements, i18n, state.posts.find(({ id }) => id === value));
+    case 'modalPostId':
+      renderModal(elements, i18n, state.posts.find(({ id }) => id === value));
       break;
-    case 'lng': i18n.changeLanguage(value).then(() => render(elements, i18n, state));
+    case 'activeFeedId':
+      renderActiveFeed(elements, value);
+      const filteredPosts = value ? state.posts.filter((post) => post.feedId === value) : state.posts;
+      renderPosts(elements, i18n, filteredPosts);
+      break;
+    case 'lng':
+      i18n.changeLanguage(value).then(() => render(elements, i18n, state));
       break;
     default:
       break;

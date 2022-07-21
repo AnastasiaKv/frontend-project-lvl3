@@ -43,7 +43,7 @@ const feedsMonitoring = (watchedState) => {
         const newPosts = posts
           .filter((post) => !oldPostsLinks.includes(post.link))
           .map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
-        watchedState.posts.unshift(...newPosts);
+        if (newPosts.length) watchedState.posts.unshift(...newPosts);
       })
       .catch((err) => {
         console.error(err);
@@ -112,11 +112,13 @@ const previewBtnHandler = (watchedState) => ({ target }) => {
   }
 };
 
-const removeBtnHandler = (watchedState) => ({ target }) => {
-  const { feedId } = target.dataset;
-  if (feedId) {
+const feedHandler = (watchedState) => ({ target }) => {
+  let feedId = target.dataset.feedId ?? target.parentElement.dataset.feedId;
+  if (target.type === 'button') {
     watchedState.feeds = watchedState.feeds.filter((feed) => feed.id !== feedId);
     watchedState.posts = watchedState.posts.filter((post) => post.feedId !== feedId);
+  } else {
+    watchedState.activeFeedId = watchedState.activeFeedId !== feedId ? feedId : null;
   }
 };
 
@@ -145,6 +147,7 @@ const app = () => {
     posts: [],
     visitedPosts: [],
     modalPostId: null,
+    activeFeedId: null,
   };
 
   const i18nInstance = i18n.createInstance();
@@ -153,7 +156,7 @@ const app = () => {
 
     elements.form.addEventListener('submit', submitFormHandler(watchedState));
     elements.postsCard.addEventListener('click', previewBtnHandler(watchedState));
-    elements.feedsCard.addEventListener('click', removeBtnHandler(watchedState));
+    elements.feedsCard.addEventListener('click', feedHandler(watchedState));
     elements.lngGroup.addEventListener('click', ({ target }) => {
       if (target.value) watchedState.lng = target.value;
     });
