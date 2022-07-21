@@ -113,7 +113,7 @@ const previewBtnHandler = (watchedState) => ({ target }) => {
 };
 
 const feedHandler = (watchedState) => ({ target }) => {
-  let feedId = target.dataset.feedId ?? target.parentElement.dataset.feedId;
+  const feedId = target.dataset.feedId ?? target.parentElement.dataset.feedId;
   if (target.type === 'button') {
     watchedState.feeds = watchedState.feeds.filter((feed) => feed.id !== feedId);
     watchedState.posts = watchedState.posts.filter((post) => post.feedId !== feedId);

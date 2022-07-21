@@ -186,11 +186,12 @@ const stateWatcher = (state, elements, i18n) => onChange(state, (path, value) =>
     case 'modalPostId':
       renderModal(elements, i18n, state.posts.find(({ id }) => id === value));
       break;
-    case 'activeFeedId':
+    case 'activeFeedId': {
       renderActiveFeed(elements, value);
-      const filteredPosts = value ? state.posts.filter((post) => post.feedId === value) : state.posts;
-      renderPosts(elements, i18n, filteredPosts);
+      const postsByFeed = value ? state.posts.filter((post) => post.feedId === value) : state.posts;
+      renderPosts(elements, i18n, postsByFeed);
       break;
+    }
     case 'lng':
       i18n.changeLanguage(value).then(() => render(elements, i18n, state));
       break;
