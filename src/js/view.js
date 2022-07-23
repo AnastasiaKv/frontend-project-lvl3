@@ -156,13 +156,8 @@ const render = (elements, i18n, state) => {
 
   if (state.feeds.length) {
     renderFeeds(elements, i18n, state.feeds);
-  }
-  if (state.posts.length) {
-    let posts = [...state.posts];
-    if (state.activeFeedId) {
-      renderActiveFeed(elements, state.activeFeedId);
-      posts = state.posts.filter((post) => post.feedId === state.activeFeedId);
-    }
+    if (state.activeFeedId) renderActiveFeed(elements, state.activeFeedId);
+    const posts = state.posts.filter((post) => post.feedId === state.activeFeedId);
     renderPosts(elements, i18n, posts, state.visitedPosts);
   }
 };

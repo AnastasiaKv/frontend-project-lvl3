@@ -116,10 +116,8 @@ const postHandler = (watchedState) => ({ target }) => {
 const feedHandler = (watchedState) => ({ target }) => {
   const feedId = target.dataset.feedId ?? target.parentElement.dataset.feedId;
   if (target.type === 'button') {
-    watchedState.feeds = watchedState.feeds
-      .filter((feed) => feed.id !== feedId);
-    watchedState.posts = watchedState.posts
-      .filter((post) => post.feedId !== feedId);
+    watchedState.feeds = watchedState.feeds.filter((feed) => feed.id !== feedId);
+    watchedState.posts = watchedState.posts.filter((post) => post.feedId !== feedId);
     watchedState.visitedPosts = watchedState.visitedPosts
       .filter((postId) => watchedState.posts.some((post) => post.id === postId));
   } else {
@@ -162,9 +160,7 @@ const app = () => {
     elements.form.addEventListener('submit', submitFormHandler(watchedState));
     elements.postsCard.addEventListener('click', postHandler(watchedState));
     elements.feedsCard.addEventListener('click', feedHandler(watchedState));
-    elements.lngGroup.addEventListener('click', ({ target }) => {
-      if (target.value) watchedState.lng = target.value;
-    });
+    elements.lngGroup.addEventListener('click', ({ target }) => { if (target.value) watchedState.lng = target.value; });
 
     view.render(elements, i18nInstance, watchedState);
     feedsMonitoring(watchedState);
