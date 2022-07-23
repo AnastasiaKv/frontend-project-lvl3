@@ -87,7 +87,17 @@ const createPostElement = (i18n) => (post) => (
   </li>`
 );
 
-const renderPosts = (elements, i18n, posts) => {
+const renderVisitedPost = (elements, visitedPosts) => {
+  const items = elements.postsCard.querySelectorAll('ul li a');
+  items.forEach((item) => {
+    if (visitedPosts.includes(item.dataset.id)) {
+      item.classList.remove('fw-bold');
+      item.classList.add('fw-normal', 'text-secondary');
+    }
+  });
+};
+
+const renderPosts = (elements, i18n, posts, visitedPosts) => {
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -104,17 +114,10 @@ const renderPosts = (elements, i18n, posts) => {
 
   card.append(cardBody, listGroup);
   elements.postsCard.innerHTML = '';
-  if (posts.length) elements.postsCard.append(card);
-};
-
-const renderVisitedPost = (elements, visitedPosts) => {
-  const items = elements.postsCard.querySelectorAll('ul li a');
-  items.forEach((item) => {
-    if (visitedPosts.includes(item.dataset.id)) {
-      item.classList.remove('fw-bold');
-      item.classList.add('fw-normal', 'text-secondary');
-    }
-  });
+  if (posts.length) {
+    elements.postsCard.append(card);
+    renderVisitedPost(elements, visitedPosts);
+  }
 };
 
 const renderModal = (elements, i18n, post) => {
@@ -155,8 +158,12 @@ const render = (elements, i18n, state) => {
     renderFeeds(elements, i18n, state.feeds);
   }
   if (state.posts.length) {
-    renderPosts(elements, i18n, state.posts);
-    renderVisitedPost(elements, state.visitedPosts);
+    let posts = [...state.posts];
+    if (state.activeFeedId) {
+      renderActiveFeed(elements, state.activeFeedId);
+      posts = state.posts.filter((post) => post.feedId === state.activeFeedId);
+    }
+    renderPosts(elements, i18n, posts, state.visitedPosts);
   }
 };
 
@@ -177,8 +184,7 @@ const stateWatcher = (state, elements, i18n) => onChange(state, (path, value) =>
       localStorage.setItem('feeds', JSON.stringify(value));
       break;
     case 'posts':
-      renderPosts(elements, i18n, value);
-      renderVisitedPost(elements, state.visitedPosts);
+      renderPosts(elements, i18n, value, state.visitedPosts);
       break;
     case 'visitedPosts':
       renderVisitedPost(elements, value);
@@ -189,7 +195,7 @@ const stateWatcher = (state, elements, i18n) => onChange(state, (path, value) =>
     case 'activeFeedId': {
       renderActiveFeed(elements, value);
       const postsByFeed = value ? state.posts.filter((post) => post.feedId === value) : state.posts;
-      renderPosts(elements, i18n, postsByFeed);
+      renderPosts(elements, i18n, postsByFeed, state.visitedPosts);
       break;
     }
     case 'lng':
